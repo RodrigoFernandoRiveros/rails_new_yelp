@@ -1,17 +1,26 @@
-# restaurant_controller.rb
 class RestaurantsController < ApplicationController
-  def top
-    @restaurants = Restaurant.where(stars: 5)
+  def index
+    @restaurants = Restaurant.all
   end
-  before_action :find_restaurant, only: [ :chef ]
 
-  def chef
-    @chef_name = @restaurant.chef_name
+  def new
+    @restaurant = Restaurant.new
+  end
+
+  def show
+    @restaurant = Restaurant.find(params[:id])
+  end
+
+  def create
+    @restaurant = Restaurant.new(restaurant_params)
+    @restaurant.save
+
+    redirect_to restaurants_path
   end
 
   private
 
-  def find_restaurant
-    @restaurant = Restaurant.find(params[:id])
+  def restaurant_params
+    params.require(:restaurant).permit(:name, :address, :category)
   end
 end
